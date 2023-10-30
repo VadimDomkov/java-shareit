@@ -6,5 +6,6 @@ import ru.practicum.shareit.item.model.Item;
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
     Item dtoToItem(ItemDto itemDto);
+
     ItemDto itemToDto(Item item);
 }
