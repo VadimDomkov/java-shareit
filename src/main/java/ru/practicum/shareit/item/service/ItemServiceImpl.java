@@ -28,13 +28,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto updateItem(long itemId, Item item, Long userId) {
+    public ItemDto updateItem(Long itemId, Item item, Long userId) {
         if (!checkIfItemExists(itemId)) {
             throw new ItemNotFoundException(String.format("Предмета с id %d не найдено", itemId));
         }
 
         Item targetItem = itemDao.returnItem(itemId);
-        if (targetItem.getOwner() != userId) {
+        if (!targetItem.getOwner().equals(userId)) {
             throw new ItemNotFoundException(String.format("Предмета с id %d у пользователя %d не найдено", itemId, userId));
         }
         if (item.getName() != null) {
