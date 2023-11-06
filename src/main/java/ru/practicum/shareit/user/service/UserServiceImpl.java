@@ -20,7 +20,8 @@ public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
 
     @Override
-    public UserDto createUser(User user) {
+    public UserDto createUser(UserDto userDto) {
+        User user = userDtoMapper.dtoToUser(userDto);
         if (checkEmail(user)) {
             throw new EmailBelongsToOtherUserException(String.format("Email %s already in use", user.getEmail()));
         }

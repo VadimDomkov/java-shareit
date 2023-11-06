@@ -21,14 +21,16 @@ public class ItemServiceImpl implements ItemService {
     private final UserService userService;
 
     @Override
-    public ItemDto createItem(Item item) {
+    public ItemDto createItem(ItemDto itemDto, Long userId) {
         //Проверка, что пользователь существует
-        userService.getUser(item.getOwner());
+        userService.getUser(userId);
+        Item item = itemMapper.dtoToItem(itemDto);
+        item.setOwner(userId);
         return itemMapper.itemToDto(itemDao.addItem(item));
     }
 
     @Override
-    public ItemDto updateItem(Long itemId, Item item, Long userId) {
+    public ItemDto updateItem(Long itemId, ItemDto item, Long userId) {
         if (!checkIfItemExists(itemId)) {
             throw new ItemNotFoundException(String.format("Предмета с id %d не найдено", itemId));
         }
