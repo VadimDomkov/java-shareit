@@ -37,4 +37,23 @@ public class ErrorHandler {
     public String handleItemNotFoundException(final ItemNotFoundException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleBookingNotFoundException(final BookingNotFoundException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleItemIsNotAvailableException(final ItemIsNotAvailableException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIncorrectParamException(final IncorrectParamException e) {
+        return e.getMessage();
+    }
+
 }
