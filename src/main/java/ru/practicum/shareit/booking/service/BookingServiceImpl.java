@@ -55,8 +55,7 @@ public class BookingServiceImpl implements BookingService {
             throw new IncorrectParamException("Проверьте корректность дат");
         }
         if (item.getOwner().getId() == userId) {
-            throw new EntityNotFoundException(String.format
-                    ("Предмет с id %d не доступен для бронирования пользователю %d", itemId, userId));
+            throw new EntityNotFoundException(String.format("Предмет с id %d не доступен для бронирования пользователю %d", itemId, userId));
         }
         Booking booking = Booking.builder()
                 .start(bookingRequestDto.getStart())
