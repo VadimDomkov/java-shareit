@@ -2,10 +2,12 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exceptions.EmailBelongsToOtherUserException;
-import ru.practicum.shareit.exceptions.UserNotFoundException;
-import ru.practicum.shareit.user.dao.UserDao;
+import ru.practicum.shareit.exceptions.EntityNotFoundException;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoMapper;
 import ru.practicum.shareit.user.model.User;
@@ -15,25 +17,27 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
     private final UserDtoMapper userDtoMapper;
+    private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         User user = userDtoMapper.dtoToUser(userDto);
-        if (checkEmail(user)) {
+        try {
+            return userDtoMapper.userToDto(userRepository.save(user));
+        } catch (DataIntegrityViolationException e) {
             throw new EmailBelongsToOtherUserException(String.format("Email %s already in use", user.getEmail()));
         }
-        return userDtoMapper.userToDto(userDao.addUser(user));
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(long userId, UserDto userDto) {
-        if (!checkIfUserExists(userId)) {
-            throw new UserNotFoundException(String.format("Пользователя с id %d не найдено", userId));
-        }
-        User userTarget = userDao.getUser(userId);
+        User userTarget = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Пользователя с id %d не найдено", userId)));
         if (userDto.getName() != null) {
             userTarget.setName(userDto.getName());
         }
@@ -43,38 +47,37 @@ public class UserServiceImpl implements UserService {
             }
             userTarget.setEmail(userDto.getEmail());
         }
-        return userDtoMapper.userToDto(userDao.updateUser(userId, userTarget));
+        return userDtoMapper.userToDto(userRepository.save(userTarget));
     }
 
     @Override
     public UserDto getUser(long userId) {
-        if (!checkIfUserExists(userId)) {
-            throw new UserNotFoundException(String.format("Пользователя с id %d не найдено", userId));
-        }
-        return userDtoMapper.userToDto(userDao.getUser(userId));
+        return userDtoMapper.userToDto(userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Пользователя с id %d не найдено", userId))));
     }
 
     @Override
+    @Transactional
     public void deleteUser(long userId) {
         if (!checkIfUserExists(userId)) {
-            throw new UserNotFoundException(String.format("Пользователя с id %d не найдено", userId));
+            throw new EntityNotFoundException(String.format("Пользователя с id %d не найдено", userId));
         }
-        userDao.deleteUser(userId);
+        userRepository.deleteById(userId);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userDao.getUsers().stream()
+        return userRepository.findAll().stream()
                 .map(user -> userDtoMapper.userToDto(user))
                 .collect(Collectors.toList());
     }
 
     private boolean checkEmail(User user) {
-        return userDao.getUsers().stream().filter(user1 -> user1.getEmail().equals(user.getEmail())).collect(Collectors.toList()).size() > 0;
+        return userRepository.findAll().stream().filter(user1 -> user1.getEmail().equals(user.getEmail())).collect(Collectors.toList()).size() > 0;
     }
 
     private boolean checkIfUserExists(Long userId) {
-        if (userDao.getUser(userId) == null) {
+        if (userRepository.findById(userId) == null) {
             return false;
         }
         return true;

@@ -9,32 +9,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandler {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleUserIsNotPresentedException(final UserIsNotPresentedException e) {
-        return e.getMessage();
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleUserIsNotAnOwnerException(final UserIsNotAnOwnerException e) {
-        return e.getMessage();
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public String handleEmailBelongsToOtherUserException(final EmailBelongsToOtherUserException e) {
-        return e.getMessage();
+    public ErrorResponse handleEmailBelongsToOtherUserException(final EmailBelongsToOtherUserException e) {
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleUserNotFoundException(final UserNotFoundException e) {
-        return e.getMessage();
+    public ErrorResponse handleEntityNotFoundException(final EntityNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleItemNotFoundException(final ItemNotFoundException e) {
-        return e.getMessage();
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIncorrectParamException(final IncorrectParamException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleValueIsNotEnumException(final ValueIsNotEnumException e) {
+        return new ErrorResponse(e.getMessage());
     }
 }

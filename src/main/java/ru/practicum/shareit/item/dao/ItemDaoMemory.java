@@ -39,7 +39,7 @@ public class ItemDaoMemory implements ItemDao {
     @Override
     public List<Item> returnUserItems(long userId) {
         return idToItem.values().stream()
-                .filter(item -> item.getOwner() == userId)
+                .filter(item -> item.getOwner().getId() == userId)
                 .collect(Collectors.toList());
     }
 
