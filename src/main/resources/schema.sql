@@ -1,3 +1,4 @@
+DROP ALL OBJECTS;
 DROP TABLE IF EXISTS requests, comments,bookings,items, users;
 
 
