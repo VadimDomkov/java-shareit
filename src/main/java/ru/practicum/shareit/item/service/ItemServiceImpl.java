@@ -83,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemExtendedDto> getUserItems(Long userId) {
         userService.getUser(userId);
-        return itemRepository.findAllByOwnerIdOrderByIdAsc(userId).stream()
+        return itemRepository.findAllByOwnerId(userId).stream()
                 .map(item -> {
                     ItemExtendedDto dto = itemMapper.itemToExtDto(item);
                     setBookingsToItem(dto);
