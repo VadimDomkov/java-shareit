@@ -21,10 +21,8 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
-    @NotNull
     @NotBlank
     private String name;
-    @NotNull
     @NotBlank
     private String description;
     @NotNull
