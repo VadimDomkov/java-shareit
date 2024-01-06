@@ -8,4 +8,6 @@ public interface ItemMapper {
     Item dtoToItem(ItemDto itemDto);
 
     ItemDto itemToDto(Item item);
+
+    ItemExtendedDto itemToExtDto(Item item);
 }
