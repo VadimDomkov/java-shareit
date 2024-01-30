@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Transactional(readOnly = true)
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
     private final UserRepository userRepository;
