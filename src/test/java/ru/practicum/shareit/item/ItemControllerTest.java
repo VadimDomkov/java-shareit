@@ -115,7 +115,6 @@ class ItemControllerTest {
     @Test
     @SneakyThrows
     void updateItem_whenUserIdEmpty_thenReturn400() {
-        {
             mvc.perform(patch("/items/1")
                     .content(objectMapper.writeValueAsString(dto))
                     .characterEncoding(StandardCharsets.UTF_8)
@@ -123,7 +122,6 @@ class ItemControllerTest {
                     .accept(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(400));
-        }
     }
 
     @Test
