@@ -199,11 +199,9 @@ class ItemServiceImplTest {
                 .build();
         item.setOwner(user);
         Mockito.when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
-        Mockito.when(bookingRepository.findFirstByItemIdAndStartAfterAndStatusOrderByStartAsc
-                (1L, LocalDateTime.now(), BookingStatus.APPROVED))
+        Mockito.when(bookingRepository.findFirstByItemIdAndStartAfterAndStatusOrderByStartAsc(1L, LocalDateTime.now(), BookingStatus.APPROVED))
                 .thenReturn(Optional.of(booking));
-        Mockito.when(bookingRepository.findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc
-                (1L, LocalDateTime.now(), BookingStatus.APPROVED))
+        Mockito.when(bookingRepository.findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(1L, LocalDateTime.now(), BookingStatus.APPROVED))
                 .thenReturn(Optional.of(booking));
         Mockito.when(commentRepository.findAllByItemId(anyLong())).thenReturn(List.of());
 

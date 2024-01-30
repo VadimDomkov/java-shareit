@@ -98,7 +98,6 @@ class ItemControllerTest {
     @Test
     @SneakyThrows
     void updateItem() {
-        {
             when(itemService.updateItem(anyLong(), any(ItemDto.class), anyLong()))
                     .thenReturn(dto);
 
@@ -111,8 +110,6 @@ class ItemControllerTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.description", is(dto.getDescription())));
-
-        }
     }
 
     @Test
