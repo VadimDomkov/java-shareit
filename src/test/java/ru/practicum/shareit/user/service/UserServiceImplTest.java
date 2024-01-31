@@ -127,6 +127,13 @@ class UserServiceImplTest {
     }
 
     @Test
+    void getUser_whenUserDtoIsNull_thenOk() {
+        userService.createUser(null);
+
+        Mockito.verify(userRepository, Mockito.times(1)).save(null);
+    }
+
+    @Test
     void getUser() {
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 

@@ -142,6 +142,18 @@ class BookingServiceImplTest {
     }
 
     @Test
+    void approveBooking_whenUserIsNull_thenThrow() {
+        Exception exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> {
+                    bookingService.approveBooking(1L, 2L, true);
+                }
+        );
+
+        assertEquals("Запроса с id 1 не найдено", exception.getMessage());
+    }
+
+    @Test
     void approveBookingReject() {
         booking.setStatus(BookingStatus.WAITING);
         Mockito.when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));

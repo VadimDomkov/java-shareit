@@ -8,8 +8,4 @@ public interface RequestMapper {
     ItemRequest dtoToRequest(ItemRequestDto dto);
 
     ItemRequestDto itemToDto(ItemRequest itemRequest);
-
-    ItemRequest extDtoToRequest(ItemRequestExtendedDto dto);
-
-    ItemRequestExtendedDto itemToExtDto(ItemRequest itemRequest);
 }
