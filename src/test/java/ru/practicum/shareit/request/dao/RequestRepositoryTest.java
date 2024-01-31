@@ -65,6 +65,7 @@ class RequestRepositoryTest {
 
         assertTrue(request.isPresent());
         assertEquals(itemRequest.getDescription(), request.get().getDescription());
+        assertEquals(itemRequest.getRequestor(), request.get().getRequestor());
     }
 
     @Test

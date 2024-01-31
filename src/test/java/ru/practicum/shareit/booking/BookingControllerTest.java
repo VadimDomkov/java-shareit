@@ -62,10 +62,10 @@ class BookingControllerTest {
         bookingDto = BookingDto.builder()
                 .end(LocalDateTime.of(2024, 6, 25, 2, 15))
                 .start(LocalDateTime.of(2024, 5, 25, 2, 15))
-                .booker(user)
                 .item(item)
                 .build();
 
+        bookingDto.setBooker(user);
         bookingRequestDto = new BookingRequestDto();
         bookingRequestDto.setItemId(1L);
         bookingRequestDto.setStart(LocalDateTime.of(2024, 5, 25, 2, 15));
