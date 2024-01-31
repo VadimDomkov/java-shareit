@@ -39,7 +39,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void EmailBelongsToOtherUserException() throws Exception {
+    void testEmailBelongsToOtherUserException() throws Exception {
         Mockito.when(userController
                 .getUser(anyLong()))
                 .thenThrow(new EmailBelongsToOtherUserException("email is in use"));
@@ -54,7 +54,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void EntityNotFoundException() throws Exception {
+    void testEntityNotFoundException() throws Exception {
         Mockito.when(userController
                 .getUser(anyLong()))
                 .thenThrow(new EntityNotFoundException("user not found"));
@@ -69,7 +69,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void IncorrectParamException() throws Exception {
+    void testIncorrectParamException() throws Exception {
         Mockito.when(userController
                 .getUser(anyLong()))
                 .thenThrow(new IncorrectParamException("incorrect param"));
@@ -84,7 +84,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void ValueIsNotEnumException() throws Exception {
+    void testValueIsNotEnumException() throws Exception {
         Mockito.when(userController
                 .getUser(anyLong()))
                 .thenThrow(new ValueIsNotEnumException("No such constant"));
@@ -99,7 +99,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void RuntimeException() throws Exception {
+    void testRuntimeException() throws Exception {
         Mockito.when(userController
                 .getUser(anyLong()))
                 .thenThrow(new RuntimeException("Unexpected exception"));
