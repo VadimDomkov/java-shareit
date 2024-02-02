@@ -46,8 +46,8 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getAllBookingsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                    @RequestParam(defaultValue = "ALL") String state,
-                                                   @RequestParam(required = false, defaultValue = "0") @Min(0) int from,
-                                                   @RequestParam(required = false, defaultValue = "20") @Min(1) int size) {
+                                                   @RequestParam(defaultValue = "0") @Min(0) int from,
+                                                   @RequestParam(defaultValue = "20") @Min(1) int size) {
         log.info("Запрос GET к /bookings");
         return bookingService.getAllBookingsByUserId(userId, state, from, size);
     }
@@ -55,8 +55,8 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> getAllBookingsForUserItems(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                        @RequestParam(defaultValue = "ALL") String state,
-                                                       @RequestParam(required = false, defaultValue = "0") @Min(0) int from,
-                                                       @RequestParam(required = false, defaultValue = "20") @Min(1) int size) {
+                                                       @RequestParam(defaultValue = "0") @Min(0) int from,
+                                                       @RequestParam(defaultValue = "20") @Min(1) int size) {
         log.info("Запрос GET к /owner");
         return bookingService.getAllBookingsForUserItems(userId, state, from, size);
     }

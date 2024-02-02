@@ -21,6 +21,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Formatter;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -84,7 +85,9 @@ class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 1)
                         .characterEncoding(StandardCharsets.UTF_8))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.booker.name", is(bookingDto.getBooker().getName())))
+                .andExpect(jsonPath("$.item.description", is(bookingDto.getItem().getDescription())));
     }
 
     @Test
