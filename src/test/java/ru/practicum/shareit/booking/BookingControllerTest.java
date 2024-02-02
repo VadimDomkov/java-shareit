@@ -21,7 +21,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Formatter;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
