@@ -2,6 +2,9 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -15,6 +18,7 @@ import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dao.RequestRepository;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
@@ -36,12 +40,18 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final RequestRepository requestRepository;
 
     @Override
     @Transactional
     public ItemDto createItem(ItemDto itemDto, Long userId) {
         Item item = itemMapper.dtoToItem(itemDto);
         item.setOwner(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("Пользователя с id %d не найдено", userId))));
+        if (itemDto.getRequestId() != null) {
+            item.setRequest(requestRepository
+                    .findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Запроса с id %d не найдено", itemDto.getRequestId()))));
+        }
         return itemMapper.itemToDto(itemRepository.save(item));
     }
 
@@ -63,6 +73,11 @@ public class ItemServiceImpl implements ItemService {
         if (item.getAvailable() != null) {
             targetItem.setAvailable(item.getAvailable());
         }
+        if (item.getRequestId() != null) {
+            targetItem.setRequest(requestRepository
+                    .findById(item.getRequestId())
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Запроса с id %d не найдено", item.getRequestId()))));
+        }
         return itemMapper.itemToDto(itemRepository.save(targetItem));
     }
 
@@ -81,9 +96,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemExtendedDto> getUserItems(Long userId) {
+    public List<ItemExtendedDto> getUserItems(Long userId, int from, int size) {
         userService.getUser(userId);
-        return itemRepository.findAllByOwnerId(userId).stream()
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").ascending());
+        return itemRepository.findAllByOwnerId(userId, pageable).stream()
                 .map(item -> {
                     ItemExtendedDto dto = itemMapper.itemToExtDto(item);
                     setBookingsToItem(dto);
@@ -94,11 +110,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItemsByName(String text, Long userId) {
+    public List<ItemDto> searchItemsByName(String text, Long userId, int from, int size) {
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
-        return itemRepository.searchByText(text).stream()
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").ascending());
+        return itemRepository.searchByText(text, pageable).stream()
                 .map(item -> itemMapper.itemToDto(item))
                 .collect(Collectors.toList());
     }
