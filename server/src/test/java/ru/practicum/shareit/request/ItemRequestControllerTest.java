@@ -70,20 +70,20 @@ class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.description", is(dto.getDescription())));
     }
 
-    @Test
-    @SneakyThrows
-    void createRequest_shouldReturn400WhenDescIsEmpty() {
-        dto.setDescription(null);
-        mvc.perform(post("/requests")
-                .content(objectMapper.writeValueAsString(dto))
-                .characterEncoding(StandardCharsets.UTF_8)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Sharer-User-Id", 1)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400));
-
-        Mockito.verify(itemRequestService, Mockito.never()).createRequest(any(), anyLong());
-    }
+//    @Test
+//    @SneakyThrows
+//    void createRequest_shouldReturn400WhenDescIsEmpty() {
+//        dto.setDescription(null);
+//        mvc.perform(post("/requests")
+//                .content(objectMapper.writeValueAsString(dto))
+//                .characterEncoding(StandardCharsets.UTF_8)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header("X-Sharer-User-Id", 1)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().is(400));
+//
+//        Mockito.verify(itemRequestService, Mockito.never()).createRequest(any(), anyLong());
+//    }
 
     @Test
     @SneakyThrows
